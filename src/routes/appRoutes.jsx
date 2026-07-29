@@ -9,6 +9,7 @@ import TransporterDashboard from "../pages/transporter/Dashboard";
 import AdminDashboard from "../pages/admin/Dashboard";
 import UsersPage from "../pages/admin/UsersPage";
 import AuditLog from "../pages/admin/AuditLog";
+import DisputeManagement from "../pages/admin/DisputeManagement";
 import RatingsPage from "../pages/admin/RatingsPage";
 import SettingsPage from "../pages/admin/SettingsPage";
 import LoadRequests from "../pages/freight-owner/LoadRequest";
@@ -70,6 +71,7 @@ const AppRoutes = () => {
       <Route element={<RequireAuth allowedRoles={["admin"]} />}>
         <Route path={ROUTES.admin.dashboard} element={<AdminDashboard />} />
         <Route path={ROUTES.admin.users} element={<UsersPage />} />
+        <Route path={ROUTES.admin.disputes} element={<DisputeManagement />} />
         <Route path={ROUTES.admin.audit} element={<AuditLog />} />
         <Route path={ROUTES.admin.ratings} element={<RatingsPage />} />
         <Route path={ROUTES.admin.settings} element={<SettingsPage />} />

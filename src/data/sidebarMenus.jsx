@@ -17,6 +17,7 @@ export const freightOwnerMenu = [
   { name: "Shipments", path: "/freight-owner/shipments", icon: <FaShippingFast /> },
   { name: "Tracking", path: "/freight-owner/tracking", icon: <FaChartBar /> },
   {name:"Review suggested transporters ", path:"/freight-owner/match-requests", icon: <FaClipboardList />},
+ {name : "Disputes", path: "/transporter/disputes", icon: <FaClipboardList />},
   { name: "Ratings", icon: <FaChartBar />, path: "/freight-owner/ratings" },
   
 ];
@@ -28,12 +29,13 @@ export const transporterMenu = [
   { name: "Browse Loads", icon: <FaBoxOpen />, path: "/transporter/browse-loads" },
   {name: "My Requests", path: "/transporter/my-requests", icon: <FaClipboardList />,},
   { name: "Ratings", icon: <FaChartBar />, path: "/transporter/ratings" },
+{name : "Disputes", path: "/transporter/disputes", icon: <FaClipboardList />}
 ];
 
 export const adminMenu = [
   { name: "Dashboard", icon: <FaHome />, path: "/admin/dashboard" },
   { name: "Users", icon: <FaUsers />, path: "/admin/users" },
+  { name: "Disputes", icon: <FaClipboardList />, path: "/admin/disputes" },
   { name: "Audit Trail", icon: <FaClipboardList />, path: "/admin/audit" },
-  { name: "Ratings", icon: <FaChartBar />, path: "/admin/ratings" },
   { name: "Settings", icon: <FaCog />, path: "/admin/settings" },
 ];

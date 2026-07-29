@@ -33,6 +33,7 @@ export const ROUTES = {
   admin: {
     dashboard: "/admin/dashboard",
     users: "/admin/users",
+    disputes: "/admin/disputes",
     audit: "/admin/audit",
     ratings: "/admin/ratings",
     settings: "/admin/settings",

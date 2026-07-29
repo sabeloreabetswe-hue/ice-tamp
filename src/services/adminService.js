@@ -99,3 +99,32 @@ activities.length
 
 
 };
+
+export const getUserStatistics = (email) => {
+  return {
+    loads: getLoads().filter(
+      (load) => load.createdBy === email
+    ).length,
+
+    trucks: getTrucks().filter(
+      (truck) => truck.createdBy === email
+    ).length,
+
+    matches: getMatches().filter(
+      (match) =>
+        match.freightOwnerEmail === email ||
+        match.transporterEmail === email
+    ).length,
+
+    shipments: getShipments().filter(
+      (shipment) =>
+        shipment.freightOwnerEmail === email ||
+        shipment.transporterEmail === email
+    ).length,
+
+    ratings: getRatings().filter(
+      (rating) =>
+        rating.transporterEmail === email
+    ).length,
+  };
+};
