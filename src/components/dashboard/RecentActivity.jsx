@@ -1,137 +1,71 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 
-import {
-  getActivities,
-} from "../../services/activityService";
-
+import { useAuth } from "../../context/AuthContext";
+import { getActivities } from "../../services/activityService";
 
 const RecentActivity = () => {
-
+  const { user } = useAuth();
   const [activities, setActivities] = useState([]);
 
-
   useEffect(() => {
+    const loadActivities = () => {
+      const activityData = getActivities();
+      const currentEmail = user?.email?.toLowerCase();
+      const isAdmin = user?.role === "admin";
+
+      const relevantActivities = activityData
+        .filter((activity) => {
+          if (isAdmin) {
+            return true;
+          }
+
+          if (!currentEmail) {
+            return !!activity.userEmail;
+          }
+
+          const activityEmail = activity.userEmail?.toLowerCase();
+          return activityEmail === currentEmail || !activity.userEmail;
+        })
+        .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+        .slice(0, 5);
+
+      setActivities(relevantActivities);
+    };
 
     loadActivities();
 
-  }, []);
+    window.addEventListener("storage", loadActivities);
+    window.addEventListener("focus", loadActivities);
 
-
-
-  const loadActivities = () => {
-
-    const activityData = getActivities();
-
-
-    const latestActivities =
-      activityData
-        .slice()
-        .reverse()
-        .slice(0, 5);
-
-
-    setActivities(latestActivities);
-
-  };
-
-
+    return () => {
+      window.removeEventListener("storage", loadActivities);
+      window.removeEventListener("focus", loadActivities);
+    };
+  }, [user?.email, user?.role]);
 
   return (
-
     <div className="bg-white rounded-2xl shadow-lg p-6 mt-8">
+      <h2 className="text-xl font-bold text-[#2A3663] mb-5">Recent Activity</h2>
 
-
-      <h2 className="text-xl font-bold text-[#2A3663] mb-5">
-
-        Recent Activity
-
-      </h2>
-
-
-
-      {
-        activities.length === 0 ? (
-
-          <p className="text-gray-500">
-
-            No recent activity available.
-
-          </p>
-
-
-        ) : (
-
-
-          <div className="space-y-4">
-
-
-            {
-              activities.map((activity) => (
-
-                <div
-
-                  key={activity.id}
-
-                  className="
-                    border-b
-                    pb-4
-                    last:border-none
-                  "
-
-                >
-
-
-                  <h3 className="font-semibold text-[#2A3663]">
-
-                    {activity.title}
-
-                  </h3>
-
-
-
-                  <p className="text-gray-600 mt-1">
-
-                    {activity.description}
-
-                  </p>
-
-
-
-                  <p className="text-sm text-gray-400 mt-2">
-
-                    {
-                      activity.createdAt
-                      ?
-                      new Date(
-                        activity.createdAt
-                      ).toLocaleString()
-                      :
-                      "Recently"
-                    }
-
-                  </p>
-
-
-                </div>
-
-              ))
-
-            }
-
-
-          </div>
-
-
-        )
-
-      }
-
-
+      {activities.length === 0 ? (
+        <p className="text-gray-500">No recent activity for this account yet.</p>
+      ) : (
+        <div className="space-y-4">
+          {activities.map((activity) => (
+            <div key={activity.id} className="border-b pb-4 last:border-none">
+              <h3 className="font-semibold text-[#2A3663]">{activity.title}</h3>
+              <p className="text-gray-600 mt-1">{activity.description}</p>
+              <p className="text-sm text-gray-400 mt-2">
+                {activity.createdAt
+                  ? new Date(activity.createdAt).toLocaleString()
+                  : "Recently"}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-
   );
-
 };
-
 
 export default RecentActivity;

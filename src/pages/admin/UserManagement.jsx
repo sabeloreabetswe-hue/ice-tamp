@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { useAuth } from "../../context/AuthContext";
 import { getUsers } from "../../services/userService";
 
 const ROLE_OPTIONS = [
@@ -17,12 +18,16 @@ const formatRoleLabel = (role) => {
 };
 
 const UserManagement = () => {
+  const { user } = useAuth();
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
 
   useEffect(() => {
-    const refreshUsers = () => setUsers(getUsers());
+    const refreshUsers = () => {
+      const storedUsers = getUsers();
+      setUsers(storedUsers);
+    };
 
     refreshUsers();
 
@@ -48,8 +53,13 @@ const UserManagement = () => {
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-[#2A3663]">User Management</h2>
-        <p className="text-gray-500">Total Users: {users.length}</p>
+        <div>
+          <h2 className="text-xl font-bold text-[#2A3663]">User Management</h2>
+          <p className="text-sm text-gray-500">Showing users loaded from local storage</p>
+        </div>
+        <div className="rounded-full bg-[#F4F4E6] px-3 py-1 text-sm font-medium text-[#2A3663]">
+          Signed in as {user?.fullName || "Admin"}
+        </div>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -94,7 +104,9 @@ const UserManagement = () => {
             ) : (
               filteredUsers.map((user) => (
                 <tr key={user.email} className="border-b hover:bg-gray-50">
-                  <td className="p-3 font-medium">{user.fullName}</td>
+                  <td className="p-3 font-medium">
+                    {user.fullName || user.name || user.email || "Unnamed user"}
+                  </td>
                   <td className="p-3">{user.email}</td>
                   <td className="p-3">
                     <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">

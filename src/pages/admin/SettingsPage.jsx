@@ -284,7 +284,7 @@ const SettingsPage = () => {
             <section className="rounded-2xl bg-white p-6 shadow-sm">
               <h2 className="text-xl font-semibold text-[#2A3663]">Current admin profile</h2>
               <div className="mt-4 rounded-xl bg-[#F4F4E6] p-4 text-sm text-gray-700">
-                <p className="font-semibold text-[#2A3663]">{currentUser?.name || "System administrator"}</p>
+                <p className="font-semibold text-[#2A3663]">{currentUser?.fullName || currentUser?.name || "System administrator"}</p>
                 <p className="mt-1">{currentUser?.email || "admin@tamp.com"}</p>
                 <p className="mt-1">Permissions: user management, moderation, reporting, and platform controls.</p>
               </div>
