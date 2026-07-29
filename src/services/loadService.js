@@ -1,4 +1,5 @@
 import mockLoads from "../data/loads";
+import { addActivity } from "./activityService";
 
 const STORAGE_KEY = "tamp_loads";
 
@@ -50,6 +51,7 @@ export const getLoadById = (id) => {
 
 export const updateLoad = (updatedLoad) => {
   const loads = getLoads();
+  const existingLoad = loads.find((load) => load.id === updatedLoad.id);
 
   const updatedLoads = loads.map((load) =>
     load.id === updatedLoad.id
@@ -62,17 +64,34 @@ export const updateLoad = (updatedLoad) => {
 
   saveLoads(updatedLoads);
 
+  addActivity({
+    type: "load",
+    title: "Load Updated",
+    description: `${updatedLoad.title || "Cargo load"} was updated`,
+    userEmail: updatedLoad.createdBy || existingLoad?.createdBy,
+  });
+
   return updatedLoad;
 };
 
 export const deleteLoad = (id) => {
   const loads = getLoads();
+  const loadToDelete = loads.find((load) => load.id === id);
 
   const updatedLoads = loads.filter(
     (load) => load.id !== id
   );
 
   saveLoads(updatedLoads);
+
+  if (loadToDelete) {
+    addActivity({
+      type: "load",
+      title: "Load Deleted",
+      description: `${loadToDelete.title || "Cargo load"} was deleted`,
+      userEmail: loadToDelete.createdBy,
+    });
+  }
 
   return updatedLoads;
 };

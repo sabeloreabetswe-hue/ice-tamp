@@ -112,6 +112,7 @@ export const updateShipmentStatus = (
 ) => {
 
   const shipments = getShipments();
+  const shipmentToUpdate = shipments.find((shipment) => shipment.id === id);
 
 
   const updatedShipments =
@@ -164,6 +165,15 @@ export const updateShipmentStatus = (
   saveShipments(
     updatedShipments
   );
+
+  if (shipmentToUpdate) {
+    addActivity({
+      type: "shipment",
+      title: "Shipment Updated",
+      description: `${shipmentToUpdate.loadTitle || "Shipment"} status changed to ${status}`,
+      userEmail: shipmentToUpdate.freightOwnerEmail,
+    });
+  }
 
 };
 

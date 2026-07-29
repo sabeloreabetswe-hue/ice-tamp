@@ -1,3 +1,5 @@
+import { addActivity } from "./activityService";
+
 const STORAGE_KEY = "tamp_trucks";
 
 // Get all trucks
@@ -56,18 +58,35 @@ export const updateTruck = (updatedTruck) => {
 
   saveTrucks(updatedTrucks);
 
+  addActivity({
+    type: "truck",
+    title: "Truck Updated",
+    description: `${updatedTruck.truckName || "Truck"} was updated`,
+    userEmail: updatedTruck.createdBy,
+  });
+
   return updatedTruck;
 };
 
 // Delete truck
 export const deleteTruck = (id) => {
   const trucks = getTrucks();
+  const truckToDelete = trucks.find((truck) => truck.id === id);
 
   const updatedTrucks = trucks.filter(
     (truck) => truck.id !== id
   );
 
   saveTrucks(updatedTrucks);
+
+  if (truckToDelete) {
+    addActivity({
+      type: "truck",
+      title: "Truck Deleted",
+      description: `${truckToDelete.truckName || "Truck"} was deleted`,
+      userEmail: truckToDelete.createdBy,
+    });
+  }
 
   return updatedTrucks;
 };

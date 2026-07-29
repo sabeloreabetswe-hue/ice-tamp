@@ -1,5 +1,11 @@
 const STORAGE_KEY = "tamp_activity";
 
+const notifyActivityChange = () => {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("activities:updated"));
+  }
+};
+
 // Get all activities
 export const getActivities = () => {
   const activities = localStorage.getItem(STORAGE_KEY);
@@ -13,6 +19,8 @@ const saveActivities = (activities) => {
     STORAGE_KEY,
     JSON.stringify(activities)
   );
+
+  notifyActivityChange();
 };
 
 // Add activity
