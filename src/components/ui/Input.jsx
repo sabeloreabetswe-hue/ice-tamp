@@ -29,20 +29,30 @@ const Input = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="
+          className={`
             w-full
             h-12
-            border
             rounded-xl
             pl-12
             pr-4
             outline-none
-            focus:border-[#B59F78]
             transition
-          "
+            ${
+              error
+                ? "border border-red-500 focus:border-red-500"
+                : "border border-gray-300 focus:border-[#B59F78]"
+            }
+          `}
+          aria-invalid={error ? "true" : "false"}
         />
 
       </div>
+
+      {error && (
+        <p className="text-sm text-red-500">
+          {error}
+        </p>
+      )}
     </div>
   );
 };
